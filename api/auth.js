@@ -148,13 +148,15 @@ router.post("/get-journey", async (req, res) => {
   }
 });
 
-router.post("/my-journey", async (req, res) => {
+router.post("/home", async (req, res) => {
   try {
     const { username } = req.body;
     const journeys = await Journey.find({ username });
+    const user = await User.findOne({ username });
     res.json({
       code: "success",
-      journeys: journeys,
+      name: user.name,
+      journey: journeys,
     });
   } catch (err) {
     return res.json({
