@@ -6,7 +6,8 @@ const journeyschema = mongoose.Schema(
     journeys: [],
     username: String,
     personality: String,
-    author: String
+    author: String,
+    journeyend: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
