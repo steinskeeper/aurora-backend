@@ -228,7 +228,7 @@ router.post("/find-journeys", async (req, res) => {
     var arrjour = [];
     for (let x in journeys) {
       if (journeys[x].personality === user.personality) {
-        manyjourneys.push({ title: journeys[x].title , id: journeys[x]["_id"] });
+        manyjourneys.push({ title: journeys[x].title , id: journeys[x]["_id"] , author: journeys[x].author,personality: journeys[x].personality});
         arrjour.push(journeys[x].title);
       }
     }
