@@ -125,12 +125,15 @@ router.post("/edit-journey", async (req, res) => {
     for (let k in singledata) {
       simtext = simtext + k.text;
     }
+    var numberSentences = 2;
+    let Summarizer = new SummarizerManager(simtext, numberSentences);
+    let summary = Summarizer.getSummaryByRank();
     const jj = await Journey.findOneAndUpdate(
       {
         _id: journeyid,
       },
       {
-        summary: simtext,
+        summary: summary,
       }
     );
 
