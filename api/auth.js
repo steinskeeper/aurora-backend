@@ -120,7 +120,7 @@ router.post("/edit-journey", async (req, res) => {
       );
       res.json({
         code: "success",
-        message: "Journey Updated",
+        message: "Milestone Added",
       });
     }
   } catch (err) {
