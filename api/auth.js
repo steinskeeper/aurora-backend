@@ -125,7 +125,7 @@ router.post("/edit-journey", async (req, res) => {
     var simtext = "";
 
     let t = singledata.map((item) => item.text);
-    t.reverse()
+    t.reverse();
     for (let i of t) {
       simtext += i + " ";
     }
@@ -228,23 +228,19 @@ router.post("/find-journeys", async (req, res) => {
     var arrjour = [];
     for (let x in journeys) {
       if (journeys[x].personality === user.personality) {
-        manyjourneys.push({title:journeys[x].title});
+        manyjourneys.push({ title: journeys[x].title });
         arrjour.push(journeys[x].title);
       }
     }
     var matches = stringSimilarity.findBestMatch(text, arrjour);
     var ratings = matches.ratings;
     for (let i = 0; i < ratings.length; i++) {
-    
-        manyjourneys[i]["rating"] = ratings[i].rating;
-      
+      manyjourneys[i]["rating"] = ratings[i].rating;
     }
-    var finaljourneys = [];
-    for (let z in manyjourneys) {
-      if (z.rating > 0.5) {
-        finaljourneys.push(z);
-      }
-    }
+    console.log(manyjourneys);
+    var finaljourneys = manyjourneys.filter((item) => item.rating > 0.2);
+
+    console.log(finaljourneys);
     res.json({
       code: "success",
       journeys: finaljourneys,
