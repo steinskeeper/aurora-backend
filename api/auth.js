@@ -108,22 +108,36 @@ router.post("/edit-journey", async (req, res) => {
       text: text,
       date: new Date(),
     };
-    if (journey.username === username) {
-      const jour = await Journey.findOneAndUpdate(
-        {
-          _id: journeyid,
+
+    const jour = await Journey.findOneAndUpdate(
+      {
+        _id: journeyid,
+      },
+      {
+        $push: {
+          journeys: obj,
         },
-        {
-          $push: {
-            journeys: obj,
-          },
-        }
-      );
-      res.json({
-        code: "success",
-        message: "Story Added",
-      });
+      }
+    );
+    const journeyy = await Journey.find;
+    var singledata = journeyy.journeys;
+    var simtext = "";
+    for (let k in singledata) {
+      simtext = simtext + k.text;
     }
+    const jj = await Journey.findOneAndUpdate(
+      {
+        _id: journeyid,
+      },
+      {
+        summary: simtext,
+      }
+    );
+
+    res.json({
+      code: "success",
+      message: "Story Added",
+    });
   } catch (err) {
     return res.json({
       code: "error",

@@ -8,6 +8,7 @@ const journeyschema = mongoose.Schema(
     personality: String,
     author: String,
     journeyend: { type: Boolean, default: false },
+    summary: { type: String, default: "No summary" },
   },
   { timestamps: true }
 );
