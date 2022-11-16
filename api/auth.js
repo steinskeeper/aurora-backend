@@ -125,6 +125,7 @@ router.post("/edit-journey", async (req, res) => {
     var simtext = "";
 
     let t = singledata.map((item) => item.text);
+    t.reverse()
     for (let i of t) {
       simtext += i + " ";
     }
@@ -221,7 +222,8 @@ router.post("/find-journeys", async (req, res) => {
     const { text, username } = req.body;
     const user = await User.findOne({ username }).lean();
 
-    const journeys = await Journey.find;
+    const journeys = await Journey.find({});
+
     var manyjourneys = [];
     for (let x in journeys) {
       if (journeys[x].personality === user.personality) {
@@ -231,14 +233,14 @@ router.post("/find-journeys", async (req, res) => {
     var matches = stringSimilarity.findBestMatch(text, manyjourneys);
     var ratings = matches.ratings;
     for (let i = 0; i < ratings.length; i++) {
-      if (ratings[i].rating > 0.5) {
+    
         manyjourneys[i]["rating"] = ratings[i].rating;
-      }
+      
     }
     var finaljourneys = [];
     for (let z in manyjourneys) {
-      if (manyjourneys[z].rating > 0.5) {
-        finaljourneys.push(manyjourneys[z]);
+      if (z.rating > 0.5) {
+        finaljourneys.push(z);
       }
     }
     res.json({
