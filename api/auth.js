@@ -85,6 +85,8 @@ router.post("/create-journey", async (req, res) => {
       title: title,
       personality: user.personality,
       username: username,
+      author: user.name,
+
     });
     res.json({
       code: "success",
