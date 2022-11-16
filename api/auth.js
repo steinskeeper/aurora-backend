@@ -20,10 +20,12 @@ router.post("/signup", async (req, res) => {
       password: encryptedPassword,
     });
 
-    res.status(200).json(user["_id"]);
+    res
+      .status(200)
+      .json({ code: "success", message: "User Created", userid: user["_id"] });
   } catch (err) {
     console.log(err);
-    res.status(500).send;
+    res.status(500).json({ code: "error", message: "Error" });
   }
 });
 
@@ -36,11 +38,12 @@ router.post("/login", async (req, res) => {
     }
     if (await bcrypt.compare(password, user.password)) {
       return res.json({
-        status: "success",
+        code: "success",
+        message: "User Logged In",
         data: { username: user.username, name: user.name, _id: user._id },
       });
     } else {
-      res.json({ status: "error", error: "Invalid username/password" });
+      res.json({ code: "error", message: "Invalid username/password" });
     }
   } catch (err) {
     console.log(err);
@@ -60,11 +63,14 @@ router.post("/personality", async (req, res) => {
       }
     );
     res.json({
+      code: "success",
+      message: "Personality Updated",
       personality: personality,
     });
   } catch (err) {
     return res.json({
-      message: "error",
+      code: "error",
+      message: "Error",
       details: "Failed to Reterive Data",
     });
   }
@@ -81,13 +87,14 @@ router.post("/create-journey", async (req, res) => {
       username: username,
     });
     res.json({
-      status: "success",
+      code: "success",
+      message: "Journey Created",
       journeyid: journey["_id"],
     });
   } catch (err) {
     return res.json({
-      message: "error",
-      details: "Failed",
+      code: "error",
+      message: "Failed to Create Journey",
     });
   }
 });
@@ -112,13 +119,14 @@ router.post("/edit-journey", async (req, res) => {
         }
       );
       res.json({
-        status: "success",
+        code: "success",
+        message: "Journey Updated",
       });
     }
   } catch (err) {
     return res.json({
-      message: "error",
-      details: "Failed",
+      code: "error",
+      message: "Failed to Update Journey",
     });
   }
 });
@@ -128,13 +136,14 @@ router.post("/get-journey", async (req, res) => {
     const { journeyid } = req.body;
     const journey = await Journey.findOne({ _id: journeyid });
     res.json({
-      status: "success",
+      code: "success",
+      message: "Journey Retrieved",
       journey: journey,
     });
   } catch (err) {
     return res.json({
-      message: "error",
-      details: "Failed",
+      code: "error",
+      message: "Failed to Reterive Data",
     });
   }
 });
@@ -144,7 +153,7 @@ router.post("/my-journey", async (req, res) => {
     const { username } = req.body;
     const journeys = await Journey.find({ username });
     res.json({
-      status: "success",
+      code: "success",
       journeys: journeys,
     });
   } catch (err) {
@@ -181,26 +190,26 @@ router.post("/find-journeys", async (req, res) => {
       }
     }
     res.json({
-      status: "success",
+      code: "success",
       journeys: finaljourneys,
     });
   } catch (err) {
     return res.json({
-      message: "error",
+      code: "error",
       details: "Failed",
     });
   }
 });
 
 router.get("/test", async function (req, res) {
-  var text = "Once there was a dog who wandered the streets night and day in search of food. One day, he found a big juicy bone and he immediately grabbed it between his mouth and took it home. On his way home, he crossed a river and saw another dog who also had a bone in its mouth. He wanted that bone for himself too. But as he opened his mouth, the bone he was biting fell into the river and sank. That night, he went home hungry."
-  var numberSentences = 1 ;
+  var text =
+    "Once there was a dog who wandered the streets night and day in search of food. One day, he found a big juicy bone and he immediately grabbed it between his mouth and took it home. On his way home, he crossed a river and saw another dog who also had a bone in its mouth. He wanted that bone for himself too. But as he opened his mouth, the bone he was biting fell into the river and sank. That night, he went home hungry.";
+  var numberSentences = 1;
   let Summarizer = new SummarizerManager(text, numberSentences);
-  let summary = Summarizer.getSummaryByRank()
+  let summary = Summarizer.getSummaryByRank();
 
   res.json({
     hello: summary,
-   
   });
 });
 
