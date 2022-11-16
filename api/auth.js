@@ -225,12 +225,14 @@ router.post("/find-journeys", async (req, res) => {
     const journeys = await Journey.find({});
 
     var manyjourneys = [];
+    var arrjour = [];
     for (let x in journeys) {
       if (journeys[x].personality === user.personality) {
-        manyjourneys.push(journeys[x].title);
+        manyjourneys.push({title:journeys[x].title});
+        arrjour.push(journeys[x].title);
       }
     }
-    var matches = stringSimilarity.findBestMatch(text, manyjourneys);
+    var matches = stringSimilarity.findBestMatch(text, arrjour);
     var ratings = matches.ratings;
     for (let i = 0; i < ratings.length; i++) {
     
