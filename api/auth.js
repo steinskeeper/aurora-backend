@@ -119,21 +119,29 @@ router.post("/edit-journey", async (req, res) => {
         },
       }
     );
-    const journeyy = await Journey.find;
+    const journeyy = await Journey.findOne({ _id: journeyid });
+
     var singledata = journeyy.journeys;
     var simtext = "";
-    for (let k in singledata) {
-      simtext = simtext + k.text;
+
+    let t = singledata.map((item) => item.text);
+    for (let i of t) {
+      simtext += i + " ";
     }
-    var numberSentences = 2;
-    let Summarizer = new SummarizerManager(simtext, numberSentences);
-    let summary = Summarizer.getSummaryByRank();
+    console.log(simtext);
+    let summary = "";
+    if (simtext) {
+      var numberSentences = 2;
+      let Summarizer = new SummarizerManager(simtext, numberSentences);
+      summary = Summarizer.getSummaryByFrequency();
+    }
+    console.log(summary.summary);
     const jj = await Journey.findOneAndUpdate(
       {
         _id: journeyid,
       },
       {
-        summary: summary,
+        summary: summary.summary,
       }
     );
 
@@ -142,6 +150,7 @@ router.post("/edit-journey", async (req, res) => {
       message: "Story Added",
     });
   } catch (err) {
+    console.log(err);
     return res.json({
       code: "error",
       message: "Failed to Update Journey",
@@ -249,7 +258,7 @@ router.get("/test", async function (req, res) {
     "Once there was a dog who wandered the streets night and day in search of food. One day, he found a big juicy bone and he immediately grabbed it between his mouth and took it home. On his way home, he crossed a river and saw another dog who also had a bone in its mouth. He wanted that bone for himself too. But as he opened his mouth, the bone he was biting fell into the river and sank. That night, he went home hungry.";
   var numberSentences = 1;
   let Summarizer = new SummarizerManager(text, numberSentences);
-  let summary = Summarizer.getSummaryByRank();
+  let summary = Summarizer.getSummaryByFrequency();
 
   res.json({
     hello: summary,
