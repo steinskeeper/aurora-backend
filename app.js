@@ -12,6 +12,8 @@ var app = express();
 var mongoose = require("mongoose");
 mongoose
   .connect("mongodb://localhost:27017/aurora")
+  .then(() => console.log("Connected to MongoDB. Server Started on port 3000"))
+
   .catch((error) => handleError(error));
 
 app.use(logger("dev"));

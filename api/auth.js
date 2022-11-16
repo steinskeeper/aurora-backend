@@ -86,7 +86,6 @@ router.post("/create-journey", async (req, res) => {
       personality: user.personality,
       username: username,
       author: user.name,
-
     });
     res.json({
       code: "success",
@@ -122,7 +121,7 @@ router.post("/edit-journey", async (req, res) => {
       );
       res.json({
         code: "success",
-        message: "Milestone Added",
+        message: "Story Added",
       });
     }
   } catch (err) {
@@ -141,6 +140,29 @@ router.post("/get-journey", async (req, res) => {
       code: "success",
       message: "Journey Retrieved",
       journey: journey,
+    });
+  } catch (err) {
+    return res.json({
+      code: "error",
+      message: "Failed to Reterive Data",
+    });
+  }
+});
+
+router.post("/update-ended", async (req, res) => {
+  try {
+    const { journeyid, isEnded } = req.body;
+    const journey = await Journey.findOneAndUpdate(
+      {
+        _id: journeyid,
+      },
+      {
+        journeyend: isEnded,
+      }
+    );
+    res.json({
+      code: "success",
+      message: "Journey Ended",
     });
   } catch (err) {
     return res.json({
